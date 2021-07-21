@@ -63,6 +63,8 @@ Dist::Zilla::Plugin::Prereqs::From::cpmfile registers prereqs from I<cpmfile>.
 
 =head1 SEE ALSO
 
+L<Dist::Zilla::Plugin::Prereqs::FromCPANfile>
+
 L<Module::cpmfile>
 
 =head1 AUTHOR
