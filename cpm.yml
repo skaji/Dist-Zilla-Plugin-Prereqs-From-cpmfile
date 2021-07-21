@@ -1,0 +1,6 @@
+prereqs:
+  runtime:
+    requires:
+      Dist::Zilla: { version: '6.023' }
+      Module::cpmfile:
+      perl: { version: '5.34.0' }
