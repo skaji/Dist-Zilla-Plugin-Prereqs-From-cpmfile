@@ -1,5 +1,3 @@
-[![Actions Status](https://github.com/skaji/Dist-Zilla-Plugin-Prereqs-From-cpmfile/workflows/linux/badge.svg)](https://github.com/skaji/Dist-Zilla-Plugin-Prereqs-From-cpmfile/actions)
-
 # NAME
 
 Dist::Zilla::Plugin::Prereqs::From::cpmfile - Register prereqs from cpmfile
