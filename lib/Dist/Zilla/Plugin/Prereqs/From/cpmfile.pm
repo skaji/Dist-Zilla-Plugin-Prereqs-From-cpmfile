@@ -1,50 +1,63 @@
-package Dist::Zilla::Plugin::Prereqs::From::cpmfile v0.0.3 {
-    use 5.34.0;
-    use Moose;
+package Dist::Zilla::Plugin::Prereqs::From::cpmfile v0.0.3;
+use v5.38;
+use Moose;
+use Module::cpmfile;
 
-    use experimental 'signatures';
-    use Module::cpmfile;
+with 'Dist::Zilla::Role::PrereqSource', 'Dist::Zilla::Role::MetaProvider';
 
-    with 'Dist::Zilla::Role::PrereqSource', 'Dist::Zilla::Role::MetaProvider';
+has cpmfile => (
+    is => 'ro',
+    lazy => 1,
+    builder => '_build_cpmfile',
+);
 
-    has cpmfile => (
-        is => 'ro',
-        lazy => 1,
-        builder => '_build_cpmfile',
-    );
+has phases => (
+    is => 'ro',
+    lazy => 1,
+    default => sub (@) { [qw(configure build runtime test develop)] },
+);
 
-    sub _build_cpmfile ($self, @) {
-        $self->log("parsing cpm.yml to extract prereqs");
-        Module::cpmfile->load("cpm.yml");
+around BUILDARGS => sub ($orig, $class, @argv) {
+    my $argv = $class->$orig(@argv);
+    my %argv = $argv->%*;
+    if (my $phases = delete $argv->{phases}) {
+        $argv{phases} = [ split /\s*,\s*/, $phases ];
     }
+    \%argv;
+};
 
-    sub register_prereqs ($self, @) {
-        $self->cpmfile->prereqs->walk(undef, undef, sub ($phase, $type, $package, $options, @) {
-            $self->zilla->register_prereqs(
-                {phase => $phase, type => $type},
-                $package => $options->{version} || 0,
-            );
-        });
-    }
-
-    sub metadata ($self, @) {
-        my $features = $self->cpmfile->features;
-        return +{} if !$features;
-
-        my $optional_features = {};
-        for my $name (sort keys $features->%*) {
-            $optional_features->{$name} = {
-                description => $features->{$name}{description},
-                prereqs => $features->{$name}{prereqs}->cpanmeta->as_string_hash,
-            };
-        }
-        return { optional_features => $optional_features };
-    }
-
-    __PACKAGE__->meta->make_immutable;
+sub _build_cpmfile ($self, @) {
+    $self->log("parsing cpm.yml to extract prereqs");
+    Module::cpmfile->load("cpm.yml");
 }
 
-1;
+sub register_prereqs ($self, @) {
+    $self->cpmfile->prereqs->walk(undef, undef, sub ($phase, $type, $package, $options, @) {
+        if (!grep { $_ eq $phase } $self->phases->@*) {
+            return;
+        }
+        $self->zilla->register_prereqs(
+            {phase => $phase, type => $type},
+            $package => $options->{version} || 0,
+        );
+    });
+}
+
+sub metadata ($self, @) {
+    my $features = $self->cpmfile->features;
+    return +{} if !$features;
+
+    my $optional_features = {};
+    for my $name (sort keys $features->%*) {
+        $optional_features->{$name} = {
+            description => $features->{$name}{description},
+            prereqs => $features->{$name}{prereqs}->cpanmeta->as_string_hash,
+        };
+    }
+    return { optional_features => $optional_features };
+}
+
+__PACKAGE__->meta->make_immutable;
 __END__
 
 =encoding utf-8
@@ -55,8 +68,14 @@ Dist::Zilla::Plugin::Prereqs::From::cpmfile - Register prereqs from cpmfile
 
 =head1 SYNOPSIS
 
-  ; dist.ini
+In you C<dist.ini>:
+
   [Prereqs::From::cpmfile]
+
+You can optionally specify phases:
+
+  [Prereqs::From::cpmfile]
+  phases = configure, build, runtime, test, develop
 
 =head1 DESCRIPTION
 

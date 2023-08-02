@@ -6,8 +6,14 @@ Dist::Zilla::Plugin::Prereqs::From::cpmfile - Register prereqs from cpmfile
 
 # SYNOPSIS
 
-    ; dist.ini
+In you `dist.ini`:
+
     [Prereqs::From::cpmfile]
+
+You can optionally specify phases:
+
+    [Prereqs::From::cpmfile]
+    phases = configure, build, runtime, test, develop
 
 # DESCRIPTION
 

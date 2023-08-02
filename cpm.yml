@@ -1,6 +1,6 @@
 prereqs:
   runtime:
     requires:
-      Dist::Zilla: { version: '6.023' }
-      Module::cpmfile: { version: '0.003' }
-      perl: { version: '5.34.0' }
+      Dist::Zilla: { version: '6.030' }
+      Module::cpmfile: { version: '0.006' }
+      perl: { version: 'v5.38' }
