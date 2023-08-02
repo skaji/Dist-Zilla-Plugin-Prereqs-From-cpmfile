@@ -18,10 +18,9 @@ has phases => (
 );
 
 around BUILDARGS => sub ($orig, $class, @argv) {
-    my $argv = $class->$orig(@argv);
-    my %argv = $argv->%*;
-    if (my $phases = delete $argv->{phases}) {
-        $argv{phases} = [ split /\s*,\s*/, $phases ];
+    my %argv = $class->$orig(@argv)->%*;
+    if (exists $argv{phases}) {
+        $argv{phases} = [ split /\s*,\s*/, $argv{phases} ];
     }
     \%argv;
 };
