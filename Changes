@@ -2,6 +2,10 @@ Revision history for Dist-Zilla-Plugin-Prereqs-From-cpmfile
 
 {{$NEXT}}
 
+v0.0.5  2023-08-04 07:17:04 JST
+  - Use defer
+  - Fix usage of Module::cpmfile::Prereqs->walk
+
 v0.0.4  2023-08-03 00:12:56 JST
   - Add phases option
   - Use v5.38

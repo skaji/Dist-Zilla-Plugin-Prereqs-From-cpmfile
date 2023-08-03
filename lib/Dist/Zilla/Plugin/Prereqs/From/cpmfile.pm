@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::Prereqs::From::cpmfile v0.0.4;
+package Dist::Zilla::Plugin::Prereqs::From::cpmfile v0.0.5;
 use v5.38;
 
 use Moose;
