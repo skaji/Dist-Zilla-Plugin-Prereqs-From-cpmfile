@@ -35,10 +35,7 @@ sub _build_cpmfile ($self, @) {
 }
 
 sub register_prereqs ($self, @) {
-    $self->cpmfile->prereqs->walk(undef, undef, sub ($phase, $type, $package, $options, @) {
-        if (!grep { $_ eq $phase } $self->phases->@*) {
-            return;
-        }
+    $self->cpmfile->prereqs->walk($self->phases, undef, sub ($phase, $type, $package, $options, @) {
         $self->zilla->register_prereqs(
             {phase => $phase, type => $type},
             $package => $options->{version} || 0,
