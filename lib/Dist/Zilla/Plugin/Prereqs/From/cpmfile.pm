@@ -1,6 +1,10 @@
 package Dist::Zilla::Plugin::Prereqs::From::cpmfile v0.0.4;
 use v5.38;
+
 use Moose;
+use experimental qw(builtin class defer for_list try);
+defer { __PACKAGE__->meta->make_immutable }
+
 use Module::cpmfile;
 
 with 'Dist::Zilla::Role::PrereqSource', 'Dist::Zilla::Role::MetaProvider';
@@ -55,8 +59,6 @@ sub metadata ($self, @) {
     }
     return { optional_features => $optional_features };
 }
-
-__PACKAGE__->meta->make_immutable;
 __END__
 
 =encoding utf-8
