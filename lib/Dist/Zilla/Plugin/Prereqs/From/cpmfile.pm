@@ -18,7 +18,7 @@ has cpmfile => (
 has phases => (
     is => 'ro',
     lazy => 1,
-    default => sub (@) { [qw(configure build runtime test develop)] },
+    default => sub (@) { [qw(configure build runtime test)] },
 );
 
 around BUILDARGS => sub ($orig, $class, @argv) {
