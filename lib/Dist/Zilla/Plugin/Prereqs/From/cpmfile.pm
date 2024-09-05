@@ -1,5 +1,5 @@
 package Dist::Zilla::Plugin::Prereqs::From::cpmfile v0.0.5;
-use v5.38;
+use v5.40;
 
 use Moose;
 use experimental qw(builtin class defer for_list try);
