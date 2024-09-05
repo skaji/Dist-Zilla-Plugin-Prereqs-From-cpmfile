@@ -2,9 +2,6 @@ package Dist::Zilla::Plugin::Prereqs::From::cpmfile v0.0.5;
 use v5.40;
 
 use Moose;
-use experimental qw(builtin class defer for_list try);
-defer { __PACKAGE__->meta->make_immutable }
-
 use Module::cpmfile;
 
 with 'Dist::Zilla::Role::PrereqSource', 'Dist::Zilla::Role::MetaProvider';
@@ -48,10 +45,10 @@ sub metadata ($self, @) {
     return +{} if !$features;
 
     my $optional_features = {};
-    for my $name (sort keys $features->%*) {
+    for my ($name, $feature) ($features->%*) {
         $optional_features->{$name} = {
-            description => $features->{$name}{description},
-            prereqs => $features->{$name}{prereqs}->cpanmeta->as_string_hash,
+            description => $feature->{description},
+            prereqs => $feature->{prereqs}->cpanmeta->as_string_hash,
         };
     }
     return { optional_features => $optional_features };

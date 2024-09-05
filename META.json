@@ -21,7 +21,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Dist::Zilla" : "6.030",
+            "Dist::Zilla" : "6.032",
             "Module::cpmfile" : "0.006",
             "perl" : "v5.40.0"
          }
